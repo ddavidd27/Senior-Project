@@ -19,7 +19,7 @@ app.use("/api/places", placesRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/sports", sportsRouter);
 
-const FRONTEND_DIR = "/home/ddavidd/TFG/frontend";
+const FRONTEND_DIR = path.join(__dirname, "../../frontend");
 
 app.use(express.static(FRONTEND_DIR));
 
