@@ -1,0 +1,193 @@
+.profile-page,
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 140px 20px 24px;
+}
+
+.container {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.profile-header {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 32px 28px;
+  text-align: center;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+}
+
+.profile-header img {
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #fff;
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.08);
+  background: #f8fafc;
+}
+
+.profile-header h2 {
+  margin: 16px 0 6px;
+  font-size: 2rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.profile-header p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.profile-section {
+  margin-top: 22px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  padding: 24px 26px;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+}
+
+.profile-section h3,
+.profile-section h4 {
+  margin: 0 0 14px;
+  font-size: 1.45rem;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+#sportsList,
+#matchesList {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+#bio {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+#editBtn {
+  width: 100%;
+  margin-top: 22px;
+  min-height: 52px;
+  border-radius: 16px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.16);
+}
+
+#editBtn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.22);
+}
+
+#editSection {
+  max-width: 980px;
+  margin: 22px auto 0;
+}
+
+#editProfileForm {
+  display: grid;
+  gap: 14px;
+}
+
+#editProfileForm label {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+#editProfileForm input,
+#editProfileForm textarea,
+#editProfileForm select {
+  width: 100%;
+  padding: 12px 14px;
+  margin-top: 6px;
+  margin-bottom: 0;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.96rem;
+}
+
+#editProfileForm textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+#editProfileForm input:focus,
+#editProfileForm textarea:focus,
+#editProfileForm select:focus {
+  outline: none;
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+}
+
+.edit-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+.edit-buttons button {
+  flex: 1;
+  min-height: 50px;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.edit-buttons button[type="submit"] {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+}
+
+.edit-buttons button[type="button"] {
+  background: #fff;
+  color: var(--ink);
+}
+
+.edit-buttons button:hover {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 720px) {
+  .container,
+  #editSection {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .profile-header,
+  .profile-section {
+    padding: 20px;
+    border-radius: 18px;
+  }
+
+  .profile-header h2 {
+    font-size: 1.7rem;
+  }
+
+  .profile-section h3,
+  .profile-section h4 {
+    font-size: 1.3rem;
+  }
+
+  .edit-buttons {
+    flex-direction: column;
+  }
+}

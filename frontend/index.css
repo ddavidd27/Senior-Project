@@ -1,0 +1,293 @@
+.hero {
+  padding: 58px 20px 48px;
+  background: #e7eaee;
+}
+
+.hero-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.hero h1 {
+  margin: 0 0 12px;
+  max-width: 720px;
+  font-size: 3.1rem;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hero-sub {
+  margin: 0 0 24px;
+  max-width: 720px;
+  color: var(--muted);
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+
+.search {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.pin {
+  font-size: 1.5rem;
+}
+
+.location {
+  flex: 1;
+  min-width: 0;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-size: 1rem;
+  color: var(--ink);
+}
+
+.location:focus {
+  outline: none;
+  border-color: rgba(37, 99, 235, 0.35);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
+}
+
+.search .btn {
+  min-height: 52px;
+  padding: 0 20px;
+  border-radius: 16px;
+}
+
+
+#about.section,
+.section.two-col {
+  padding-top: 34px;
+  padding-bottom: 34px;
+}
+
+#about .text-block h2,
+.section.two-col .text-block h2 {
+  margin-bottom: 14px;
+  font-size: 2.6rem;
+  line-height: 1.1;
+}
+
+#about .lorem,
+.section.two-col .lorem {
+  font-size: 1.15rem;
+  line-height: 1.65;
+}
+
+.photo-block {
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+}
+
+.about-image {
+  transition: transform 0.35s ease;
+}
+
+.photo-block:hover .about-image {
+  transform: scale(1.03);
+}
+
+
+.games {
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.games h3 {
+  margin: 0 0 18px;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.carousel {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.arrow {
+  border: none;
+  background: transparent;
+  font-size: 2rem;
+  color: var(--muted);
+  cursor: pointer;
+  transition: 0.2s ease;
+  padding: 0 4px;
+}
+
+.arrow:hover {
+  color: var(--ink);
+}
+
+.cards {
+  flex: 1;
+  display: flex;
+  gap: 18px;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  padding: 8px 0;
+  scroll-behavior: auto;
+}
+
+.cards .card {
+  flex: 0 0 340px;
+  margin: 0;
+  border-radius: 18px;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.04);
+}
+
+.cards .card-img {
+  height: 185px;
+  border-radius: 18px 18px 0 0;
+}
+
+.cards .card-meta {
+  padding: 18px;
+}
+
+.cards .meta-title,
+.cards .card-meta > div:first-child {
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.cards .meta-sub {
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+
+.faq {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.faq h3 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.faq-sub {
+  margin: 0 0 20px;
+  max-width: 700px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.faq-item {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.03);
+}
+
+.faq-item summary {
+  cursor: pointer;
+  padding: 18px 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  list-style: none;
+}
+
+.faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-item summary::before {
+  content: "▸";
+  margin-right: 10px;
+  color: var(--ink);
+}
+
+.faq-item[open] summary::before {
+  content: "▾";
+}
+
+.faq-answer {
+  padding: 0 20px 18px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: 0.98rem;
+}
+
+
+@media (max-width: 1100px) {
+  .hero h1 {
+    font-size: 2.7rem;
+  }
+
+  #about .text-block h2,
+  .section.two-col .text-block h2 {
+    font-size: 2.2rem;
+  }
+
+  .cards .card {
+    flex: 0 0 300px;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero {
+    padding: 34px 20px;
+  }
+
+  .hero h1 {
+    font-size: 2.15rem;
+  }
+
+  .hero-sub {
+    font-size: 1.05rem;
+  }
+
+  .search {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pin {
+    display: none;
+  }
+
+  .location {
+    width: 100%;
+  }
+
+  .games h3,
+  .faq h3 {
+    font-size: 1.65rem;
+  }
+
+  #about .text-block h2,
+  .section.two-col .text-block h2 {
+    font-size: 2rem;
+  }
+
+  .cards {
+    gap: 12px;
+  }
+
+  .cards .card {
+    flex: 0 0 260px;
+  }
+
+  .cards .card-img {
+    height: 165px;
+  }
+
+  .faq-item summary {
+    padding: 16px 18px;
+  }
+
+  .faq-answer {
+    padding: 0 18px 16px;
+  }
+}

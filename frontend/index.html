@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Play4All</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+
+  <body>
+    <header class="topbar">
+      <a href="/index.html" class="brand">
+        <img src="/images/logo.png" alt="Play4All logo" class="logo" />
+        <div class="app-name">Play4All</div>
+      </a>
+
+      <nav class="nav">
+        <a class="pill" href="/games.html">Games</a>
+        <a class="pill" href="/about.html">About</a>
+        <a class="pill" href="/index.html#faq">FAQ</a>
+
+        <a class="pill" href="/chat" id="chatLink" style="display:none">Chat</a>
+
+        <div class="account-dropdown">
+          <a class="pill pill-ghost" href="/login" id="loginLink">Log in</a>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="hero-inner">
+          <h1>Find a game. Join the community.</h1>
+          <p class="hero-sub">Search nearby sports and pickup games happening today.</p>
+
+          <form class="search" action="#">
+            <span class="pin">📍</span>
+            <input class="location" type="search" placeholder="Enter city or postcode" />
+            <button class="btn btn-primary" type="submit">Search</button>
+            <button class="btn btn-outline" type="button" id="useLocationBtn">Use my location</button>
+          </form>
+        </div>
+      </section>
+      <section id="about" class="section two-col">
+        <div class="photo-block">
+          <img src="/images/baloncesto.jpg" alt="People playing basketball" class="about-image" />
+        </div>
+
+        <div class="text-block">
+          <h2>Who we are</h2>
+          <p class="lorem">
+            Play4All connects players with nearby games and local organizers, making it easy to find people to play with anytime.
+          </p>
+          <p class="lorem">
+            Whether you're looking for a casual match or a more competitive game, our platform helps you discover opportunities, join in seconds, and stay connected with other players.
+          </p>
+          <a href="/games.html" class="btn btn-outline">Browse Games</a>
+        </div>
+      </section>
+      <section id="games" class="section games">
+        <h3>Games available near you</h3>
+
+        <div class="carousel">
+          <button class="arrow" type="button">‹</button>
+
+          <div class="cards" id="games-cards">
+            <article class="card">
+              <div class="card-img"></div>
+              <div class="card-meta">
+                <div class="meta-title">Football — 5v5</div>
+                <div class="meta-sub">Riverside Park • 18:00</div>
+                <button
+                  class="btn btn-outline join-btn"
+                  data-game-id="demo-football-5v5"
+                  type="button"
+                >
+                  Join
+                </button>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-img"></div>
+              <div class="card-meta">
+                <div class="meta-title">Basketball — Pickup</div>
+                <div class="meta-sub">Eastwood Court • 19:30</div>
+                <button
+                  class="btn btn-outline join-btn"
+                  data-game-id="demo-basketball-pickup"
+                  type="button"
+                >
+                  Join
+                </button>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-img"></div>
+              <div class="card-meta">
+                <div class="meta-title">Running Group</div>
+                <div class="meta-sub">Seafront • 07:00</div>
+                <button
+                  class="btn btn-outline join-btn"
+                  data-game-id="demo-running-group-1"
+                  type="button"
+                >
+                  Join
+                </button>
+              </div>
+            </article>
+
+            <article class="card">
+              <div class="card-img"></div>
+              <div class="card-meta">
+                <div class="meta-title">Running Group</div>
+                <div class="meta-sub">Seafront • 07:00</div>
+                <button
+                  class="btn btn-outline join-btn"
+                  data-game-id="demo-running-group-2"
+                  type="button"
+                >
+                  Join
+                </button>
+              </div>
+            </article>
+          </div>
+
+          <button class="arrow" type="button">›</button>
+        </div>
+      </section>
+      <section class="section two-col">
+        <div class="photo-block">
+          <img src="/images/gente-hablando.png" alt="People organizing a game" class="about-image">
+        </div>
+        <div class="text-block">
+          <h2>Why choose Play4All</h2>
+          <p class="lorem">
+            Play4All makes it easy to find reliable games near you and connect with players who share your level and interests.
+          </p>
+          <p class="lorem">
+            Our platform helps you discover verified listings, join games in seconds, and stay organized with simple scheduling and built-in communication.
+          </p>
+          <p class="lorem">
+            Whether you're looking for a quick pickup match or a regular group to play with, Play4All gives you the tools to get started effortlessly.
+          </p>
+          <a href="#" class="btn btn-primary" id="createGameBtn">Create a Game</a>
+        </div>
+      </section>
+
+      <section id="faq" class="section faq">
+        <h3>FAQ</h3>
+
+        <details class="faq-item">
+          <summary>How do I join a game?</summary>
+          <div class="faq-answer">
+            Open a game listing and click “Join”. Once you join, the game will appear in your activity and you’ll be able to follow any updates.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Can I create my own game?</summary>
+          <div class="faq-answer">
+            Yes. You can create your own game by choosing the sport, date, time, level, and location so other players can join.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Do I need an account to use Play4All?</summary>
+          <div class="faq-answer">
+            You can browse games without an account, but you need to sign in if you want to join a game, create one, or use the chat features.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Are there skill levels?</summary>
+          <div class="faq-answer">
+            Yes. Games can be marked as Beginner, Intermediate, or Advanced to help players find the right match for their level.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Can I chat with other players?</summary>
+          <div class="faq-answer">
+            Yes. Play4All includes chat features so you can communicate with other users and stay updated about your games.
+          </div>
+        </details>
+
+        <details class="faq-item">
+          <summary>Is Play4All free to use?</summary>
+          <div class="faq-answer">
+            Yes. Play4All is currently free to use for browsing, joining, and creating local sports games.
+          </div>
+        </details>
+      </section>
+    </main>
+    <footer class="footer">
+      <div class="footer-left">
+        <div class="brand footer-brand">
+          <img src="/images/logo.png" alt="Play4All logo" class="logo footer-logo" />
+          <div class="app-name">Play4All</div>
+        </div>
+        <p class="footer-text">Find nearby games, join local players, and create your own sports events.</p>
+      </div>
+
+      <div class="footer-mid">
+        <a class="footer-link" href="/games.html">Games</a>
+        <a class="footer-link" href="/about.html">About</a>
+        <a class="footer-link" href="/index.html#faq">FAQ</a>
+        <a class="footer-link" href="/login">Log in</a>
+      </div>
+
+      <div class="footer-right">
+        <div class="footer-copy">© 2026 Play4All</div>
+        <a class="footer-link" href="#privacy">Privacy</a>
+        <a class="footer-link" href="#terms">Terms</a>
+      </div>
+    </footer>
+  <script type="module" src="/js/home/initHome.js"></script>
+  </body>
+</html>
