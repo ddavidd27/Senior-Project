@@ -1,19 +1,43 @@
-import { setupLoginLink } from "/js/home/dropdown.js";
-
 document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("token");
-  const chatLink = document.getElementById("chatLink");
-  if (token && chatLink) {
-    chatLink.style.display = "inline-flex";
+  const menuToggle = document.getElementById("menuToggle");
+  const mainNav = document.getElementById("mainNav");
+  const overlay = document.getElementById("navOverlay");
+
+  if (!menuToggle || !mainNav || !overlay) return;
+
+  function openMenu() {
+    mainNav.classList.add("open");
+    overlay.classList.add("active");
+    menuToggle.classList.add("active");
+    menuToggle.setAttribute("aria-expanded", "true");
+    document.body.style.overflow = "hidden";
   }
 
-    const menuToggle = document.getElementById("menuToggle");
-    const mainNav = document.getElementById("mainNav");
+  function closeMenu() {
+    mainNav.classList.remove("open");
+    overlay.classList.remove("active");
+    menuToggle.classList.remove("active");
+    menuToggle.setAttribute("aria-expanded", "false");
+    document.body.style.overflow = "";
+  }
 
-    if (menuToggle && mainNav) {
-    menuToggle.addEventListener("click", () => {
-        mainNav.classList.toggle("open");
-    });
+  menuToggle.addEventListener("click", () => {
+    if (mainNav.classList.contains("open")) {
+      closeMenu();
+    } else {
+      openMenu();
     }
-  setupLoginLink();
+  });
+
+  overlay.addEventListener("click", closeMenu);
+
+  mainNav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", closeMenu);
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 900) {
+      closeMenu();
+    }
+  });
 });

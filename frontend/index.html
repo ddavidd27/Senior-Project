@@ -14,7 +14,11 @@
         <img src="/images/logo.png" alt="Play4All logo" class="logo" />
         <div class="app-name">Play4All</div>
       </a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Open menu">☰</button>
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
+        <span class="menu-toggle-line"></span>
+        <span class="menu-toggle-line"></span>
+        <span class="menu-toggle-line"></span>
+      </button>
       <nav class="nav" id ="mainNav">
         <a class="pill" href="/games.html">Games</a>
         <a class="pill" href="/about.html">About</a>
@@ -27,6 +31,7 @@
         </div>
       </nav>
     </header>
+          <div class="nav-overlay" id="navOverlay"></div>
 
     <main>
       <section class="hero">
@@ -217,5 +222,6 @@
       </div>
     </footer>
   <script type="module" src="/js/home/initHome.js"></script>
+  <script src="/js/pages/initHeader.js"></script>
   </body>
 </html>

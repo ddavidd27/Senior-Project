@@ -14,17 +14,24 @@
         <img src="/images/logo.png" alt="Play4All logo" class="logo" />
         <div class="app-name">Play4All</div>
       </a>
-
-      <nav class="nav">
+      <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
+        <span class="menu-toggle-line"></span>
+        <span class="menu-toggle-line"></span>
+        <span class="menu-toggle-line"></span>
+      </button>
+      <nav class="nav" id ="mainNav">
         <a class="pill" href="/games.html">Games</a>
         <a class="pill" href="/about.html">About</a>
         <a class="pill" href="/index.html#faq">FAQ</a>
 
         <a class="pill" href="/chat" id="chatLink" style="display:none">Chat</a>
 
-        <a class="pill pill-ghost" href="/login" id="loginLink">Log in</a>
+        <div class="account-dropdown">
+          <a class="pill pill-ghost" href="/login" id="loginLink">Log in</a>
+        </div>
       </nav>
     </header>
+    <div class="nav-overlay" id="navOverlay"></div>
   <main>
     <h1 id="title">Login</h1>
 

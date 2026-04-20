@@ -36,8 +36,7 @@ body {
   gap: 28px;
 
   padding: 18px 42px;
-  background: rgba(255, 255, 255, 0.97);
-  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.98);
   border-bottom: 1px solid rgba(15, 23, 42, 0.06);
   box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
 }
@@ -314,17 +313,71 @@ main {
 
 .menu-toggle {
   display: none;
+  position: relative;
+  width: 52px;
+  height: 52px;
+  padding: 0;
   background: #fff;
   border: 1px solid rgba(37, 99, 235, 0.18);
   color: var(--accent);
   border-radius: 14px;
-  min-width: 48px;
-  height: 48px;
-  font-size: 28px;
-  line-height: 1;
   cursor: pointer;
   align-items: center;
   justify-content: center;
+}
+
+.menu-toggle-line {
+  position: absolute;
+  left: 13px;
+  width: 24px;
+  height: 2px;
+  background: var(--accent);
+  border-radius: 999px;
+  transition: transform 0.3s ease, opacity 0.25s ease, top 0.3s ease;
+}
+
+.menu-toggle-line:nth-child(1) {
+  top: 17px;
+}
+
+.menu-toggle-line:nth-child(2) {
+  top: 24px;
+}
+
+.menu-toggle-line:nth-child(3) {
+  top: 31px;
+}
+
+.menu-toggle.active .menu-toggle-line:nth-child(1) {
+  top: 24px;
+  transform: rotate(45deg);
+}
+
+.menu-toggle.active .menu-toggle-line:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active .menu-toggle-line:nth-child(3) {
+  top: 24px;
+  transform: rotate(-45deg);
+}
+
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.28);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 1050;
+}
+
+.nav-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 @media (max-width: 900px) {
@@ -334,6 +387,7 @@ main {
     min-height: 88px;
     padding: 14px 18px;
     gap: 12px;
+    z-index: 1200;
   }
 
   .brand {
@@ -352,28 +406,7 @@ main {
     display: inline-flex;
   }
 
-  .nav {
-    display: none;
-    position: absolute;
-    top: calc(100% + 10px);
-    right: 16px;
-    left: 16px;
-    z-index: 1100;
 
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-
-    padding: 14px;
-    background: #fff;
-    border: 1px solid var(--line);
-    border-radius: 24px;
-    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
-  }
-
-  .nav.open {
-    display: flex;
-  }
 
   .nav .pill,
   .nav .pill-ghost {
@@ -385,6 +418,41 @@ main {
 
   .account-dropdown {
     width: 100%;
+  }
+
+  .nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: auto;
+    width: min(82vw, 340px);
+    height: 100vh;
+    z-index: 1100;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 10px;
+
+    padding: 110px 18px 24px;
+    background: #fff;
+    border-left: 1px solid var(--line);
+    border-radius: 0;
+    box-shadow: -18px 0 40px rgba(15, 23, 42, 0.12);
+
+    transform: translateX(100%);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: transform 0.32s ease, opacity 0.25s ease, visibility 0.25s ease;
+  }
+
+  .nav.open {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
   }
 }
 
