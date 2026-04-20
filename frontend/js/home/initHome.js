@@ -2,7 +2,7 @@ import { setupLoginLink, refreshFriendRequestBadge } from "/js/home/dropdown.js"
 import { checkAuthAndUpdateUI } from "/js/home/auth.js";
 import { loadGamesIntoCarousel, renderGames } from "/js/home/games.js";
 import { initCarouselAndTopbar } from "/js/home/carousel.js";
-import { checkPendingRatings } from "/js/home/ratings.js";
+import { showError } from "/js/ui/popups.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   setupLoginLink();
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (useLocationBtn) {
     useLocationBtn.addEventListener("click", () => {
       if (!navigator.geolocation) {
-        alert("Geolocation is not supported by your browser.");
+        showError("Could not get your location.");
         return;
       }
 
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           window.location.href = `/games.html?lat=${encodeURIComponent(lat)}&lng=${encodeURIComponent(lng)}&radius=35`;
         },
         () => {
-          alert("Could not get your location.");
+          showError("Could not get your location.");
         }
       );
     });

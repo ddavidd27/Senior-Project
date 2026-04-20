@@ -1,3 +1,5 @@
+import { showError } from "/js/ui/popups.js";
+
 function getToken() {
   return localStorage.getItem("token");
 }
@@ -171,12 +173,12 @@ document.getElementById("sendBtn").addEventListener("click", () => {
   if (!text) return;
 
   if (!selectedFriend) {
-    alert("Pick a friend first");
+    showError("Pick a friend first");
     return;
   }
 
   socket.emit("dm:send", { to: selectedFriend._id, text }, (res) => {
-    if (!res?.ok) alert(res?.error || "Could not send");
+    if (!res?.ok) showError(res?.error || "Could not send");
   });
 
   input.value = "";

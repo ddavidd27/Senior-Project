@@ -1,3 +1,5 @@
+import { showError, showSuccess } from "/js/ui/popups.js";
+
 const token = localStorage.getItem("token");
 
 if (!token) {
@@ -198,7 +200,7 @@ if (editProfileForm) {
     ].filter(Boolean);
 
     if (sports.length < 1) {
-      alert("At least one sport is required");
+      showError("At least one sport is required");
       return;
     }
 
@@ -219,16 +221,17 @@ if (editProfileForm) {
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.error || "Error updating profile");
+        showError(data.error || "Error updating profile");
         return;
       }
 
       currentUser = data;
       renderProfile(data);
       editSection.style.display = "none";
+      showSuccess("Profile updated successfully");
     } catch (err) {
       console.error(err);
-      alert("Error updating profile");
+      showError("Error updating profile");
     }
   });
 }

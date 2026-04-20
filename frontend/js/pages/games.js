@@ -1,5 +1,6 @@
 import { checkAuthAndUpdateUI } from "/js/home/auth.js";
 import { setupLoginLink } from "/js/home/dropdown.js";
+import { showError, showSuccess } from "/js/ui/popups.js";
 
 const gamesContainer = document.getElementById("gamesContainer");
 const sportFilter = document.getElementById("sportFilter");
@@ -315,15 +316,17 @@ async function joinGame(gameId) {
     const data = await res.json();
 
     if (!res.ok) {
-      alert(data.message || "Could not join game");
+      showError(data.error || data.message || "Could not join game");
       return;
     }
 
+    showSuccess("Joined game successfully");
+    
     await loadGames();
     renderGames();
   } catch (error) {
     console.error("Error joining game:", error);
-    alert("Something went wrong while joining the game");
+    showError("Something went wrong while joining the game");
   }
 }
 

@@ -1,5 +1,6 @@
 import { requireLogin } from "/js/home/auth.js";
 import { loadGamesIntoCarousel } from "/js/home/games.js";
+import { showError } from "/js/ui/popups.js";
 
 export function setupProtectedActions() {
   document.querySelectorAll(".join-btn").forEach((btn) => {
@@ -20,14 +21,14 @@ export function setupProtectedActions() {
 
         const data = await res.json();
         if (!res.ok) {
-          alert(data.error || "Could not join");
+          showError(data.error || "Could not join");
           return;
         }
 
         await loadGamesIntoCarousel();
       } catch (err) {
         console.error(err);
-        alert("Server error");
+        showError("Server error");
       }
     });
   });
