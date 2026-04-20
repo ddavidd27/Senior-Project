@@ -22,11 +22,29 @@ const sport3Level = document.getElementById("sport3Level");
 const email = document.getElementById("email");
 const password = document.getElementById("password");
 
+const avatarInput = document.getElementById("avatar");
+const avatarPicker = document.getElementById("avatarPicker");
+
+if (avatarPicker) {
+  avatarPicker.addEventListener("click", (e) => {
+    if (e.target.tagName !== "IMG") return;
+
+    const selected = e.target.dataset.avatar;
+    avatarInput.value = selected;
+
+    avatarPicker.querySelectorAll("img").forEach(img => {
+      img.style.border = "2px solid transparent";
+    });
+    e.target.style.border = "2px solid #2563eb";
+  });
+}
+
 let mode = "login";
 
 function setMode(nextMode) {
   mode = nextMode;
   errorMsg.textContent = "";
+  const avatarSection = document.getElementById("avatarSection");
 
   const isSignup = mode === "signup";
 
@@ -38,6 +56,7 @@ function setMode(nextMode) {
   username.style.display = isSignup ? "block" : "none";
   bio.style.display = isSignup ? "block" : "none";
   sportsSection.style.display = isSignup ? "block" : "none";
+  avatarSection.style.display = isSignup ? "block" : "none";
 
   firstName.required = isSignup;
   lastName.required = isSignup;
@@ -55,6 +74,7 @@ function setMode(nextMode) {
     sport1Level.value = "beginner";
     sport2Level.value = "beginner";
     sport3Level.value = "beginner";
+    avatarInput.value = "user.png";
   }
 
   toggleText.textContent = isSignup
@@ -99,6 +119,7 @@ form.addEventListener("submit", async (e) => {
         password: password.value,
         bio: bio.value.trim(),
         sports,
+        avatar: avatarInput.value,
       };
     }
 

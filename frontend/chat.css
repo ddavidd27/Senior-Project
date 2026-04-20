@@ -74,13 +74,20 @@
 }
 
 
-
 .friends {
   padding: 14px;
   overflow: auto;
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.friend-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
 }
 
 .friend {
@@ -171,6 +178,23 @@
   letter-spacing: 0.04em;
 }
 
+.msg-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.msg-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.msg-body {
+  min-width: 0;
+}
 
 .composer {
   display: flex;

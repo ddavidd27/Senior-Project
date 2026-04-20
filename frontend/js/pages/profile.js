@@ -30,6 +30,25 @@ const editSport3Level = document.getElementById("editSport3Level");
 const matchesList = document.getElementById("matchesList");
 const matchesSection = matchesList ? matchesList.closest(".profile-section") : null;
 
+const avatarEl = document.getElementById("avatar");
+const avatarPickerEdit = document.getElementById("avatarPickerEdit");
+const editAvatarInput = document.getElementById("editAvatar");
+
+if (avatarPickerEdit) {
+  avatarPickerEdit.addEventListener("click", (e) => {
+    if (e.target.tagName !== "IMG") return;
+
+    const selected = e.target.dataset.avatar;
+    editAvatarInput.value = selected;
+
+    avatarPickerEdit.querySelectorAll("img").forEach(img => {
+      img.style.border = "2px solid transparent";
+    });
+
+    e.target.style.border = "2px solid #2563eb";
+  });
+}
+
 let currentUser = null;
 
 async function loadProfile() {
@@ -66,6 +85,8 @@ async function loadProfile() {
 }
 
 function renderProfile(data) {
+  avatarEl.src = `/images/avatar/${data.avatar || "user.png"}`;
+
   nameEl.textContent =
     `${data.firstName || ""} ${data.lastName || ""}`.trim() || "No name";
 
@@ -121,6 +142,17 @@ async function loadMatches() {
 
 function fillEditForm(user) {
   editBio.value = user.bio || "";
+
+  editAvatarInput.value = user.avatar || "user.png";
+
+  if (avatarPickerEdit) {
+    avatarPickerEdit.querySelectorAll("img").forEach((img) => {
+      img.style.border =
+        img.dataset.avatar === (user.avatar || "user.png")
+          ? "2px solid #2563eb"
+          : "2px solid transparent";
+    });
+  }
 
   const sports = Array.isArray(user.sports) ? user.sports : [];
 
@@ -180,6 +212,7 @@ if (editProfileForm) {
         body: JSON.stringify({
           bio: editBio.value.trim(),
           sports,
+          avatar: editAvatarInput.value,
         }),
       });
 

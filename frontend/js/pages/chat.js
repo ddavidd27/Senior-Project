@@ -11,7 +11,7 @@ const socket = io({ auth: { token } });
 
 let me = null;               
 let selectedFriend = null;   
-let userCache = new Map();  
+let userCache = new Map();
 const composer = document.getElementById("composer");
 
 function displayName(u) {
@@ -36,17 +36,28 @@ function setChatHeader(friend) {
   if (composer) composer.classList.remove("hidden");
 }
 
+function avatarSrc(u) {
+  return `/images/avatar/${u?.avatar || "user.png"}`;
+}
+
 function addMessage(msg) {
   const div = document.getElementById("messages");
   const el = document.createElement("div");
 
-  const fromName = userCache.get(String(msg.from)) || String(msg.from).slice(0, 6);
+  const fromUser = userCache.get(String(msg.from));
+  const fromName = fromUser ? displayName(fromUser) : String(msg.from).slice(0, 6);
+  const fromAvatar = fromUser ? avatarSrc(fromUser) : "/images/avatar/user.png";
   const isMe = me && String(msg.from) === String(me._id);
 
   el.className = `msg ${isMe ? "me" : ""}`;
   el.innerHTML = `
-    <div class="meta">${fromName}</div>
-    <div>${msg.text}</div>
+    <div class="msg-row">
+      <img src="${fromAvatar}" alt="${fromName}" class="msg-avatar">
+      <div class="msg-body">
+        <div class="meta">${fromName}</div>
+        <div>${msg.text}</div>
+      </div>
+    </div>
   `;
 
   div.appendChild(el);
@@ -101,7 +112,7 @@ async function loadMe() {
     return null;
   }
   const data = await res.json();
-  userCache.set(String(data._id), displayName(data));
+  userCache.set(String(data._id), data);
   document.getElementById("meLabel").textContent = `You: ${displayName(data)}`;
   return data;
 }
@@ -117,11 +128,14 @@ async function loadFriends() {
   box.innerHTML = "";
 
   friends.forEach((f) => {
-    userCache.set(String(f._id), displayName(f));
+    userCache.set(String(f._id), f);
 
     const btn = document.createElement("button");
     btn.className = "friend";
-    btn.textContent = displayName(f);
+    btn.innerHTML = `
+      <img src="${avatarSrc(f)}" alt="${displayName(f)}" class="friend-avatar">
+      <span>${displayName(f)}</span>
+    `;
     btn.addEventListener("click", () => {
       [...box.querySelectorAll(".friend")].forEach(x => x.classList.remove("active"));
       btn.classList.add("active");

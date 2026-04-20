@@ -34,6 +34,7 @@
     <div class="nav-overlay" id="navOverlay"></div>
   <div class="container">
     <div class="profile-header">
+      <img id="avatar" src="/images/avatar/user.png" alt="Profile avatar">
       <h2 id="name"></h2>
       <p id="username"></p>
     </div>
@@ -60,6 +61,27 @@
         <form id="editProfileForm">
             <label for="editBio">Bio</label>
             <textarea id="editBio" placeholder="Bio"></textarea>
+            <p>Change avatar</p>
+
+            <div id="avatarPickerEdit" style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
+              <img src="/images/avatar/user.png" data-avatar="user.png">
+              <img src="/images/avatar/badminton.png" data-avatar="badminton.png">
+              <img src="/images/avatar/basketball.png" data-avatar="basketball.png">
+              <img src="/images/avatar/boxing.png" data-avatar="boxing.png">
+              <img src="/images/avatar/climbing.png" data-avatar="climbing.png">
+              <img src="/images/avatar/crossfit.png" data-avatar="crossfit.png">
+              <img src="/images/avatar/cycling.png" data-avatar="cycling.png">
+              <img src="/images/avatar/gym.png" data-avatar="gym.png">
+              <img src="/images/avatar/hiking.png" data-avatar="hiking.png">
+              <img src="/images/avatar/padel.png" data-avatar="padel.png">
+              <img src="/images/avatar/pickleball.png" data-avatar="pickleball.png">
+              <img src="/images/avatar/skate.png" data-avatar="skate.png">
+              <img src="/images/avatar/table-tennis.png" data-avatar="table-tennis.png">
+              <img src="/images/avatar/volleyball.png" data-avatar="volleyball.png">
+              <img src="/images/avatar/yoga.png" data-avatar="yoga.png">
+            </div>
+
+            <input type="hidden" id="editAvatar" value="user.png">
 
             <h4>Sports</h4>
 
