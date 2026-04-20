@@ -35,12 +35,12 @@ function openModal(html) {
   return root;
 }
 
-export function openFriendsModal() {
+export async function openFriendsModal() {
   const token = requireLogin("/");
   if (!token) return;
 
-  openModal(`
-    <div style="margin-bottom:10px;">
+  const root = openModal(`
+    <div style="margin-bottom:16px;">
       <div style="font-weight:600; margin-bottom:6px;">Add friend</div>
       <input id="addFriendUsername" placeholder="username (ej: carlos)" style="width:100%; padding:10px; border-radius:10px; border:1px solid #ddd;">
       <button id="sendFriendReqBtn" style="margin-top:10px; padding:10px 12px; border-radius:10px; border:0; cursor:pointer;">
@@ -48,13 +48,20 @@ export function openFriendsModal() {
       </button>
       <div id="addFriendMsg" style="margin-top:10px; font-size:14px;"></div>
     </div>
+
+    <div style="font-weight:600; margin-bottom:10px;">Your friends</div>
+    <div id="friendsList" style="display:flex; flex-direction:column; gap:10px;"></div>
+    <div id="friendsMsg" style="margin-top:10px; font-size:14px;"></div>
   `);
 
   document.getElementById("sendFriendReqBtn").onclick = async () => {
     const username = (document.getElementById("addFriendUsername").value || "").trim();
     const msg = document.getElementById("addFriendMsg");
 
-    if (!username) { msg.textContent = "Write a username."; return; }
+    if (!username) {
+      msg.textContent = "Write a username.";
+      return;
+    }
 
     const res = await fetch("/api/users/friends/request", {
       method: "POST",
@@ -66,12 +73,73 @@ export function openFriendsModal() {
     });
 
     const data = await res.json();
+
     if (!res.ok) {
       msg.textContent = data.error || "Could not send request";
       return;
     }
+
     msg.textContent = "✅ Friend request sent!";
   };
+
+  const list = root.querySelector("#friendsList");
+  const msg = root.querySelector("#friendsMsg");
+
+  const res = await fetch("/api/users/friends", {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  const friends = await res.json();
+
+  if (!res.ok) {
+    msg.textContent = friends.error || "Could not load friends";
+    return;
+  }
+
+  if (!friends.length) {
+    list.innerHTML = `<div style="opacity:.7;">You have no friends yet.</div>`;
+    return;
+  }
+
+  list.innerHTML = friends.map((f) => `
+    <div style="border:1px solid #eee; border-radius:12px; padding:10px; display:flex; justify-content:space-between; gap:10px; align-items:center;">
+      <div>
+        <div style="font-weight:600;">${escapeHtml(f.firstName)} ${escapeHtml(f.lastName)} (@${escapeHtml(f.username)})</div>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button data-profile="${f._id}" style="padding:8px 10px; border-radius:10px; border:1px solid #ddd; background:white; cursor:pointer;">Profile</button>
+        <button data-remove="${f._id}" style="padding:8px 10px; border-radius:10px; border:0; cursor:pointer;">Remove</button>
+      </div>
+    </div>
+  `).join("");
+
+  list.querySelectorAll("[data-profile]").forEach((btn) => {
+    btn.onclick = () => {
+      const friendId = btn.getAttribute("data-profile");
+      window.location.href = `/profile?id=${friendId}`;
+    };
+  });
+
+  list.querySelectorAll("[data-remove]").forEach((btn) => {
+    btn.onclick = async () => {
+      const friendId = btn.getAttribute("data-remove");
+
+      const r2 = await fetch(`/api/users/friends/${friendId}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      const d2 = await r2.json();
+
+      if (!r2.ok) {
+        msg.textContent = d2.error || "Could not remove friend";
+        return;
+      }
+
+      msg.textContent = "✅ Friend removed";
+      openFriendsModal();
+    };
+  });
 }
 
 export async function openRequestsModal() {

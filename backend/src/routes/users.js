@@ -258,4 +258,27 @@ router.put("/me", auth, async (req, res) => {
   }
 });
 
+router.delete("/friends/:friendId", auth, async (req, res) => {
+  try {
+    const { friendId } = req.params;
+
+    const me = await User.findById(req.userId);
+    const other = await User.findById(friendId);
+
+    if (!me || !other) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    me.friends = me.friends.filter((id) => String(id) !== String(friendId));
+    other.friends = other.friends.filter((id) => String(id) !== String(req.userId));
+
+    await me.save();
+    await other.save();
+
+    res.json({ message: "Friend removed" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 module.exports = router;

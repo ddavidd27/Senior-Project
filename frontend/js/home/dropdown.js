@@ -1,5 +1,6 @@
 import { getToken } from "/js/home/util.js";
 import { openFriendsModal, openRequestsModal } from "/js/home/modals.js";
+import { openPendingRatingsModal, refreshRatingsBadge } from "/js/home/ratings.js";
 
 export function setupLoginLink() {
   const loginLink = document.getElementById("loginLink");
@@ -49,6 +50,10 @@ export function setupLoginLink() {
       Friend requests
       <span id="reqBadge" style="margin-left:8px; background:#ff3b30; color:#fff; font-size:12px; padding:2px 8px; border-radius:999px; display:none;"></span>
     </button>
+    <button id="ratingsBtn" type="button" style="width:100%; text-align:left; padding:10px 12px; border:0; background:transparent; cursor:pointer;">
+      Ratings
+      <span id="ratingsBadge" style="margin-left:8px; background:#2563eb; color:#fff; font-size:12px; padding:2px 8px; border-radius:999px; display:none;"></span>
+    </button>
     <div style="height:1px; background:#eee; margin:6px 0;"></div>
     <button id="logoutBtn" type="button" style="width:100%; text-align:left; padding:10px 12px; border:0; background:transparent; cursor:pointer;">
       Log out
@@ -78,6 +83,11 @@ export function setupLoginLink() {
   menu.querySelector("#friendRequestsBtn").addEventListener("click", () => {
     menu.style.display = "none";
     openRequestsModal();
+  });
+
+  menu.querySelector("#ratingsBtn").addEventListener("click", () => {
+    menu.style.display = "none";
+    openPendingRatingsModal();
   });
 
   menu.querySelector("#logoutBtn").addEventListener("click", () => {

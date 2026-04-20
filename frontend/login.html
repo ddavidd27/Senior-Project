@@ -36,15 +36,15 @@
     <h1 id="title">Login</h1>
 
     <form id="authForm">
-      <input id="firstName" type="text" placeholder="First name" style="display:none" />
-      <input id="lastName" type="text" placeholder="Last name" style="display:none" />
-      <input id="username" type="text" placeholder="Username" style="display:none" />
+      <input id="firstName" type="text" placeholder="First name*" style="display:none" />
+      <input id="lastName" type="text" placeholder="Last name*" style="display:none" />
+      <input id="username" type="text" placeholder="Username*" style="display:none" />
       <textarea id="bio" placeholder="Bio (optional)" style="display:none"></textarea>
 
       <div id="sportsSection" style="display:none">
         <div>
           <select id="sport1">
-            <option value="">Select sport</option>
+            <option value="">Select sport*</option>
             <option value="football">Football</option>
             <option value="basketball">Basketball</option>
             <option value="volleyball">Volleyball</option>
@@ -109,8 +109,8 @@
         </div>
       </div>
       </div>
-      <input id="email" type="email" placeholder="Email" required />
-      <input id="password" type="password" placeholder="Password" required />
+      <input id="email" type="email" placeholder="Email*" required />
+      <input id="password" type="password" placeholder="Password*" required />
 
       <button id="submitBtn" type="submit">Login</button>
     </form>
@@ -149,6 +149,6 @@
   </footer>
 
   <script src="/js/pages/login.js"></script>
-  <script src="/js/pages/initHeader.js"></script>
+  <script type="module" src="/js/pages/initHeader.js"></script>
 </body>
 </html>

@@ -7,6 +7,7 @@ const gamesRouter = require("./routes/games");
 const placesRoutes = require("./routes/places");
 const chatRoutes = require("./routes/chat");
 const sportsRouter = require("./routes/sports");
+const ratingsRouter = require("./routes/ratings");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/api/games", gamesRouter);
 app.use("/api/places", placesRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/sports", sportsRouter);
+app.use("/api/ratings", ratingsRouter);
 
 const FRONTEND_DIR = path.join(__dirname, "../../frontend");
 

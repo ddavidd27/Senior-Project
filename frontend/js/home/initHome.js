@@ -2,6 +2,7 @@ import { setupLoginLink, refreshFriendRequestBadge } from "/js/home/dropdown.js"
 import { checkAuthAndUpdateUI } from "/js/home/auth.js";
 import { loadGamesIntoCarousel, renderGames } from "/js/home/games.js";
 import { initCarouselAndTopbar } from "/js/home/carousel.js";
+import { checkPendingRatings } from "/js/home/ratings.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
   setupLoginLink();
@@ -48,6 +49,22 @@ document.addEventListener("DOMContentLoaded", async () => {
           alert("Could not get your location.");
         }
       );
+    });
+  }
+
+  const faqItems = document.querySelectorAll(".faq-item");
+
+  if (faqItems.length) {
+    faqItems.forEach((item) => {
+      item.addEventListener("toggle", () => {
+        if (item.open) {
+          faqItems.forEach((other) => {
+            if (other !== item) {
+              other.open = false;
+            }
+          });
+        }
+      });
     });
   }
 });

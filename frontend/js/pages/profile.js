@@ -4,6 +4,10 @@ if (!token) {
   window.location.href = "/login";
 }
 
+const params = new URLSearchParams(window.location.search);
+const profileId = params.get("id");
+const isOwnProfile = !profileId;
+
 const nameEl = document.getElementById("name");
 const usernameEl = document.getElementById("username");
 const bioEl = document.getElementById("bio");
@@ -23,24 +27,39 @@ const editSport2Level = document.getElementById("editSport2Level");
 const editSport3 = document.getElementById("editSport3");
 const editSport3Level = document.getElementById("editSport3Level");
 
+const matchesList = document.getElementById("matchesList");
+const matchesSection = matchesList ? matchesList.closest(".profile-section") : null;
+
 let currentUser = null;
 
 async function loadProfile() {
   try {
-    const res = await fetch("/api/users/me", {
+    const url = isOwnProfile ? "/api/users/me" : `/api/users/${profileId}`;
+
+    const res = await fetch(url, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
     if (!res.ok) {
-      throw new Error("No se pudo cargar el perfil");
+      throw new Error("Could not load profile");
     }
 
     const data = await res.json();
     currentUser = data;
 
     renderProfile(data);
+
+    if (!isOwnProfile) {
+      if (editBtn) editBtn.style.display = "none";
+      if (editSection) editSection.style.display = "none";
+      if (matchesSection) matchesSection.style.display = "none";
+      return;
+    }
+
+    if (editBtn) editBtn.style.display = "";
+    if (matchesSection) matchesSection.style.display = "";
   } catch (err) {
     console.error("Error loading profile:", err);
   }
@@ -50,8 +69,10 @@ function renderProfile(data) {
   nameEl.textContent =
     `${data.firstName || ""} ${data.lastName || ""}`.trim() || "No name";
 
-  usernameEl.textContent = "@" + (data.username || "");
-  bioEl.textContent = data.bio || "Sin bio";
+  setTimeout(() => {
+    usernameEl.textContent = data.username ? `@${data.username}` : "";
+  }, 0);
+  bioEl.textContent = data.bio || "No bio yet";
 
   sportsList.innerHTML = "";
 
@@ -67,8 +88,9 @@ function renderProfile(data) {
     sportsList.appendChild(li);
   }
 }
-
 async function loadMatches() {
+  if (!isOwnProfile) return;
+
   try {
     const res = await fetch("/api/games/my", {
       headers: {
@@ -76,22 +98,21 @@ async function loadMatches() {
       },
     });
 
-    if (!res.ok) throw new Error("Error cargando partidos");
+    if (!res.ok) throw new Error("Error loading matches");
 
     const matches = await res.json();
 
-    const list = document.getElementById("matchesList");
-    list.innerHTML = "";
+    matchesList.innerHTML = "";
 
     if (matches.length === 0) {
-      list.innerHTML = "<li>No matches yet</li>";
+      matchesList.innerHTML = "<li>No matches yet</li>";
       return;
     }
 
     matches.forEach((match) => {
       const li = document.createElement("li");
       li.textContent = `${match.sport} — ${match.date} at ${match.startTime}`;
-      list.appendChild(li);
+      matchesList.appendChild(li);
     });
   } catch (err) {
     console.error(err);
@@ -113,65 +134,71 @@ function fillEditForm(user) {
   editSport3Level.value = sports[2]?.level || "beginner";
 }
 
-editBtn.addEventListener("click", () => {
-  if (!currentUser) return;
+if (editBtn) {
+  editBtn.addEventListener("click", () => {
+    if (!currentUser) return;
 
-  fillEditForm(currentUser);
-  editSection.style.display = "block";
-});
+    fillEditForm(currentUser);
+    editSection.style.display = "block";
+  });
+}
 
-cancelEditBtn.addEventListener("click", () => {
-  editSection.style.display = "none";
-});
+if (cancelEditBtn) {
+  cancelEditBtn.addEventListener("click", () => {
+    editSection.style.display = "none";
+  });
+}
 
-editProfileForm.addEventListener("submit", async (e) => {
-  e.preventDefault();
+if (editProfileForm) {
+  editProfileForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-  const sports = [
-    editSport1.value.trim()
-      ? { name: editSport1.value.trim(), level: editSport1Level.value }
-      : null,
-    editSport2.value.trim()
-      ? { name: editSport2.value.trim(), level: editSport2Level.value }
-      : null,
-    editSport3.value.trim()
-      ? { name: editSport3.value.trim(), level: editSport3Level.value }
-      : null,
-  ].filter(Boolean);
+    const sports = [
+      editSport1.value.trim()
+        ? { name: editSport1.value.trim(), level: editSport1Level.value }
+        : null,
+      editSport2.value.trim()
+        ? { name: editSport2.value.trim(), level: editSport2Level.value }
+        : null,
+      editSport3.value.trim()
+        ? { name: editSport3.value.trim(), level: editSport3Level.value }
+        : null,
+    ].filter(Boolean);
 
-  if (sports.length < 1) {
-    alert("At least one sport is required");
-    return;
-  }
-
-  try {
-    const res = await fetch("/api/users/me", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        bio: editBio.value.trim(),
-        sports,
-      }),
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      alert(data.error || "Error updating profile");
+    if (sports.length < 1) {
+      alert("At least one sport is required");
       return;
     }
 
-    currentUser = data;
-    renderProfile(data);
-    editSection.style.display = "none";
-  } catch (err) {
-    console.error(err);
-    alert("Error updating profile");
-  }
-});
+    try {
+      const res = await fetch("/api/users/me", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          bio: editBio.value.trim(),
+          sports,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.error || "Error updating profile");
+        return;
+      }
+
+      currentUser = data;
+      renderProfile(data);
+      editSection.style.display = "none";
+    } catch (err) {
+      console.error(err);
+      alert("Error updating profile");
+    }
+  });
+}
 
 loadProfile();
 loadMatches();

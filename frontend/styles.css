@@ -418,6 +418,14 @@ main {
 
   .account-dropdown {
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .account-dropdown .pill,
+  .account-dropdown .pill-ghost {
+    width: auto;
   }
 
   .nav {

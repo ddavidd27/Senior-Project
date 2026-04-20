@@ -1,4 +1,14 @@
-document.addEventListener("DOMContentLoaded", () => {
+import { setupLoginLink } from "/js/home/dropdown.js";
+import { checkAuthAndUpdateUI } from "/js/home/auth.js";
+import { refreshFriendRequestBadge } from "/js/home/dropdown.js";
+import { refreshRatingsBadge } from "/js/home/ratings.js";
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await checkAuthAndUpdateUI();
+  setupLoginLink();
+  await refreshFriendRequestBadge();
+  await refreshRatingsBadge();
+
   const menuToggle = document.getElementById("menuToggle");
   const mainNav = document.getElementById("mainNav");
   const overlay = document.getElementById("navOverlay");
@@ -32,7 +42,10 @@ document.addEventListener("DOMContentLoaded", () => {
   overlay.addEventListener("click", closeMenu);
 
   mainNav.querySelectorAll("a").forEach((link) => {
-    link.addEventListener("click", closeMenu);
+    link.addEventListener("click", () => {
+      if (link.closest(".account-dropdown")) return;
+      closeMenu();
+    });
   });
 
   window.addEventListener("resize", () => {

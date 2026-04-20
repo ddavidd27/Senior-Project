@@ -42,7 +42,13 @@ router.get("/", async (req, res) => {
   try {
     const { location, lat, lng, radius = 10 } = req.query;
 
-    const games = await Game.find().sort({ createdAt: -1 }).limit(50);
+    const now = new Date();
+
+    const games = (await Game.find().sort({ createdAt: -1 }).limit(50))
+      .filter((game) => {
+        const gameDateTime = new Date(`${game.date}T${game.startTime}`);
+        return gameDateTime >= now;
+      });
 
     if (!location && (!lat || !lng)) {
       return res.json(games);

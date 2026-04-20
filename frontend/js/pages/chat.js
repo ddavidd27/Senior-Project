@@ -12,6 +12,7 @@ const socket = io({ auth: { token } });
 let me = null;               
 let selectedFriend = null;   
 let userCache = new Map();  
+const composer = document.getElementById("composer");
 
 function displayName(u) {
   if (!u) return "Unknown";
@@ -22,13 +23,17 @@ function displayName(u) {
 function setChatHeader(friend) {
   const title = document.getElementById("chatTitle");
   const sub = document.getElementById("chatSub");
+
   if (!friend) {
     title.textContent = "Pick a friend";
     sub.textContent = "Start chatting";
+    if (composer) composer.classList.add("hidden");
     return;
   }
+
   title.textContent = `Talking to: ${displayName(friend)}`;
   sub.textContent = "Real-time messages via Socket.io";
+  if (composer) composer.classList.remove("hidden");
 }
 
 function addMessage(msg) {
@@ -163,6 +168,14 @@ document.getElementById("sendBtn").addEventListener("click", () => {
   input.value = "";
 });
 
+document.getElementById("messageInput").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    document.getElementById("sendBtn").click();
+  }
+});
+
+setChatHeader(null);
 (async () => {
   me = await loadMe();
   if (!me) return;

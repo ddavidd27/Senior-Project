@@ -217,6 +217,9 @@
   box-shadow: 0 8px 18px rgba(37, 99, 235, 0.22);
 }
 
+.composer.hidden {
+  display: none;
+}
 
 @media (max-width: 1000px) {
   .wrap {
