@@ -183,4 +183,25 @@ router.post("/:id/join", auth, async (req, res) => {
   }
 });
 
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    const User = require("../models/User");
+    const me = await User.findById(req.userId);
+
+    if (!me || !me.isAdmin) {
+      return res.status(403).json({ error: "Admin access required" });
+    }
+
+    const deletedGame = await Game.findByIdAndDelete(req.params.id);
+
+    if (!deletedGame) {
+      return res.status(404).json({ error: "Game not found" });
+    }
+
+    res.json({ message: "Game deleted successfully" });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
 module.exports = router;

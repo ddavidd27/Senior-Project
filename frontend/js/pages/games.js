@@ -1,6 +1,6 @@
 import { checkAuthAndUpdateUI } from "/js/home/auth.js";
 import { setupLoginLink } from "/js/home/dropdown.js";
-import { showError, showSuccess } from "/js/ui/popups.js";
+import { showError, showSuccess, showConfirm } from "/js/ui/popups.js";
 
 const gamesContainer = document.getElementById("gamesContainer");
 const sportFilter = document.getElementById("sportFilter");
@@ -287,11 +287,22 @@ function createGameCard(game) {
       <p><strong>Players:</strong> ${joinedCount}/${game.peopleNeeded}</p>
 
       <button class="join-btn">Join</button>
+      ${currentUser?.isAdmin ? `<button class="delete-btn">Delete</button>` : ""}
     </div>
   `;
 
   const joinBtn = card.querySelector(".join-btn");
   joinBtn.addEventListener("click", () => joinGame(game._id));
+
+  const deleteBtn = card.querySelector(".delete-btn");
+
+  if (deleteBtn) {
+    deleteBtn.addEventListener("click", () => {
+      showConfirm("Delete this game?", async () => {
+        await deleteGame(game._id);
+      });
+    });
+  }
 
   return card;
 }
@@ -321,12 +332,44 @@ async function joinGame(gameId) {
     }
 
     showSuccess("Joined game successfully");
-    
+
     await loadGames();
     renderGames();
   } catch (error) {
     console.error("Error joining game:", error);
     showError("Something went wrong while joining the game");
+  }
+}
+
+async function deleteGame(gameId) {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    showError("You must be logged in");
+    return;
+  }
+
+  try {
+    const res = await fetch(`/api/games/${gameId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      showError(data.error || "Could not delete game");
+      return;
+    }
+
+    showSuccess("Game deleted successfully");
+    await loadGames();
+    renderGames();
+  } catch (error) {
+    console.error("Error deleting game:", error);
+    showError("Something went wrong while deleting the game");
   }
 }
 

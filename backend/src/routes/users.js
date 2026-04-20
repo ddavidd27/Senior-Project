@@ -11,7 +11,7 @@ router.get("/health", (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { firstName, lastName, username, email, password, bio, sports, avatar } = req.body;
+    const { firstName, lastName, username, email, password, bio, sports, avatar, adminCode } = req.body;
 
     const existing = await User.findOne({ username: username.toLowerCase() });
       if (existing) {
@@ -24,6 +24,8 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ error: "At least one sport is required" });
     }
 
+    const isAdmin = adminCode === "Iamandadminandyouarenot547";
+
     const user = await User.create({
       firstName,
       lastName,
@@ -33,6 +35,7 @@ router.post("/", async (req, res) => {
       avatar: avatar || "user.png",
       bio,
       sports,
+      isAdmin,
     });
 
     const token = jwt.sign(

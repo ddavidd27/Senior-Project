@@ -82,6 +82,11 @@ const userSchema = new mongoose.Schema(
       trim: true,
     },
 
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
+
     bio: {
       type: String,
       default: "",

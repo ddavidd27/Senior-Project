@@ -25,6 +25,8 @@ const password = document.getElementById("password");
 const avatarInput = document.getElementById("avatar");
 const avatarPicker = document.getElementById("avatarPicker");
 
+const adminCode = document.getElementById("adminCode");
+
 if (avatarPicker) {
   avatarPicker.addEventListener("click", (e) => {
     if (e.target.tagName !== "IMG") return;
@@ -62,6 +64,7 @@ function setMode(nextMode) {
   lastName.required = isSignup;
   username.required = isSignup;
   sport1.required = isSignup;
+  adminCode.style.display = isSignup ? "block" : "none";
 
   if (!isSignup) {
     firstName.value = "";
@@ -75,6 +78,7 @@ function setMode(nextMode) {
     sport2Level.value = "beginner";
     sport3Level.value = "beginner";
     avatarInput.value = "user.png";
+    adminCode.value = "";
   }
 
   toggleText.textContent = isSignup
@@ -120,6 +124,7 @@ form.addEventListener("submit", async (e) => {
         bio: bio.value.trim(),
         sports,
         avatar: avatarInput.value,
+        adminCode: adminCode.value.trim(),
       };
     }
 
