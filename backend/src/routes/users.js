@@ -11,7 +11,7 @@ router.get("/health", (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { firstName, lastName, username, email, password, bio, sports } = req.body;
+    const { firstName, lastName, username, email, password, bio, sports, avatar } = req.body;
 
     const existing = await User.findOne({ username: username.toLowerCase() });
       if (existing) {
@@ -30,6 +30,7 @@ router.post("/", async (req, res) => {
       username: username.toLowerCase(),
       email,
       password: hashedPassword,
+      avatar: avatar || "user.png",
       bio,
       sports,
     });
@@ -78,8 +79,8 @@ router.post("/login", async (req, res) => {
 router.get("/me", auth, async (req, res) => {
   try {
     const me = await User.findById(req.userId)
-      .populate("friends", "firstName lastName username level")
-      .populate("friendRequests", "firstName lastName username level");
+      .populate("friends", "firstName lastName username level avatar")
+      .populate("friendRequests", "firstName lastName username level avatar")
 
     if (!me) return res.status(404).json({ error: "User not found" });
     res.json(me);
@@ -142,7 +143,7 @@ router.post("/friends/request", auth, async (req, res) => {
 router.get("/friends/requests", auth, async (req, res) => {
   try {
     const me = await User.findById(req.userId)
-      .populate("friendRequests", "_id username firstName lastName level");
+      .populate("friendRequests", "firstName lastName username level avatar")
 
     res.json({ requests: me.friendRequests || [] });
   } catch (err) {
@@ -181,7 +182,7 @@ router.post("/friends/accept", auth, async (req, res) => {
 router.get("/friends/requests", auth, async (req, res) => {
   try {
     const me = await User.findById(req.userId)
-      .populate("friendRequests", "_id username firstName lastName level");
+      .populate("friendRequests", "_id username firstName lastName level avatar");
 
     res.json({ requests: me.friendRequests || [] });
   } catch (err) {
@@ -218,7 +219,7 @@ router.get("/:id", async (req, res) => {
 
 router.put("/me", auth, async (req, res) => {
   try {
-    const { bio, sports } = req.body;
+    const { bio, sports, avatar } = req.body;
 
     if (!sports || !Array.isArray(sports) || sports.length < 1) {
       return res.status(400).json({ error: "At least one sport is required" });
@@ -244,8 +245,9 @@ router.put("/me", auth, async (req, res) => {
       {
         bio: bio || "",
         sports: cleanedSports,
+        avatar: avatar || "user.png", 
       },
-      { new: true, runValidators: true }
+      { new: true, runValidators: true } 
     );
 
     if (!updatedUser) {

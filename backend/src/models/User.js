@@ -76,6 +76,12 @@ const userSchema = new mongoose.Schema(
       },
     },
 
+    avatar: {
+      type: String,
+      default: "user.png",
+      trim: true,
+    },
+
     bio: {
       type: String,
       default: "",
