@@ -235,7 +235,7 @@
 
 @media (max-width: 900px) {
   .games-page {
-    padding: 20px 18px 10px;
+    padding: 130px 18px 40px;
   }
 
   .games-filters {
@@ -245,12 +245,13 @@
 
 @media (max-width: 720px) {
   .games-page {
-    padding: 18px 16px 0;
+    padding: 110px 16px 40px;
   }
 
   .games-filters {
     flex-direction: column;
     align-items: stretch;
+    gap: 10px; 
   }
 
   .games-filters select,
@@ -261,9 +262,14 @@
 
   .sport-games-grid {
     grid-template-columns: 1fr;
+    gap: 20px;
   }
 
   .game-img {
     height: 180px;
+  }
+
+  .sport-title {
+    font-size: 1.5rem;
   }
 }
