@@ -44,8 +44,7 @@ router.get("/", async (req, res) => {
 
     const now = new Date();
 
-    const games = (await Game.find().sort({ createdAt: -1 }).limit(50))
-      .filter((game) => {
+    const games = (await Game.find().populate("players", "username").populate("createdBy", "username").sort({ createdAt: -1 }).limit(50)).filter((game) => {
         const gameDateTime = new Date(`${game.date}T${game.startTime}`);
         return gameDateTime >= now;
       });
@@ -104,8 +103,9 @@ router.get("/sports", (req, res) => {
 router.get("/my", auth, async (req, res) => {
   try {
     const games = await Game.find({
-      players: req.userId
-    });
+      players: req.userId })
+      .populate("players", "username")
+      .populate("createdBy", "username");
 
     const sorted = games.sort((a, b) => {
       const dateA = new Date(`${a.date}T${a.startTime}`);
@@ -156,6 +156,7 @@ router.post("/", auth, async (req, res) => {
             ? Number(locationLng)
             : null,
       createdBy: req.userId,
+      players: [req.userId],
     });
 
     res.status(201).json(game);
@@ -178,6 +179,39 @@ router.post("/:id/join", auth, async (req, res) => {
     await game.save();
 
     res.json({ message: "Joined successfully", game });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+router.post("/:id/leave", auth, async (req, res) => {
+  try {
+    const game = await Game.findById(req.params.id);
+    if (!game) return res.status(404).json({ error: "Game not found" });
+
+    if (!Array.isArray(game.players)) game.players = [];
+
+    const isInGame = game.players.some((p) => p.toString() === req.userId);
+    if (!isInGame) {
+      return res.status(400).json({ error: "You are not in this game" });
+    }
+
+    const wasCreator = game.createdBy && game.createdBy.toString() === req.userId;
+
+    game.players = game.players.filter((p) => p.toString() !== req.userId);
+
+    if (game.players.length === 0) {
+      await Game.findByIdAndDelete(game._id);
+      return res.json({ message: "Left game successfully. Game deleted because no players remained." });
+    }
+
+    if (wasCreator) {
+      game.createdBy = game.players[0];
+    }
+
+    await game.save();
+
+    res.json({ message: "Left game successfully", game });
   } catch (err) {
     res.status(400).json({ error: err.message });
   }

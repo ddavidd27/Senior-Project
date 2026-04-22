@@ -259,6 +259,14 @@ function createGameCard(game) {
 
   const joinedCount = Array.isArray(game.players) ? game.players.length : 0;
 
+  const isJoined = Array.isArray(game.players)
+    && currentUser
+    && game.players.some((p) => {
+      if (typeof p === "string") return p === currentUser._id;
+      if (p && typeof p === "object") return p._id === currentUser._id;
+      return false;
+    });
+
   const mapsUrl = game.locationPlaceId
     ? `https://www.google.com/maps/search/?api=1&query_place_id=${game.locationPlaceId}`
     : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(game.locationName || "")}`;
@@ -286,16 +294,29 @@ function createGameCard(game) {
 
       <p><strong>Players:</strong> ${joinedCount}/${game.peopleNeeded}</p>
 
-      <button class="join-btn">Join</button>
+      <button class="join-btn">${isJoined ? "Leave" : "Join"}</button>
+      <button class="info-btn">More info</button>
       ${currentUser?.isAdmin ? `<button class="delete-btn">Delete</button>` : ""}
     </div>
   `;
 
   const joinBtn = card.querySelector(".join-btn");
-  joinBtn.addEventListener("click", () => joinGame(game._id));
+  joinBtn.addEventListener("click", () => {
+    if (isJoined) {
+      leaveGame(game._id);
+    } else {
+      joinGame(game._id);
+    }
+  });
+
+  const infoBtn = card.querySelector(".info-btn");
+  if (infoBtn) {
+    infoBtn.addEventListener("click", () => {
+      showGameInfo(game);
+    });
+  }
 
   const deleteBtn = card.querySelector(".delete-btn");
-
   if (deleteBtn) {
     deleteBtn.addEventListener("click", () => {
       showConfirm("Delete this game?", async () => {
@@ -338,6 +359,34 @@ async function joinGame(gameId) {
   } catch (error) {
     console.error("Error joining game:", error);
     showError("Something went wrong while joining the game");
+  }
+}
+
+async function leaveGame(gameId) {
+  const token = localStorage.getItem("token");
+
+  try {
+    const res = await fetch(`/api/games/${gameId}/leave`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      showError(data.error || "Could not leave game");
+      return;
+    }
+
+    showSuccess("Left game");
+
+    await loadGames();
+    renderGames();
+  } catch (err) {
+    console.error(err);
+    showError("Error leaving game");
   }
 }
 
@@ -386,6 +435,24 @@ function clearFilters() {
   url.searchParams.delete("radius");
 
   window.location.href = url.pathname;
+}
+
+function showGameInfo(game) {
+  const playersText = Array.isArray(game.players) && game.players.length
+    ? game.players
+        .map((p) => {
+          if (typeof p === "string") return p;
+          return p.username ? `@${p.username}` : p._id;
+        })
+        .join(", ")
+    : "No players yet";
+
+  showConfirm(`
+    <strong>${capitalizeWords(game.sport)}</strong><br>
+    ${game.date} - ${game.startTime}<br><br>
+    Players:<br>
+    ${playersText}
+  `);
 }
 
 function capitalizeWords(text = "") {

@@ -54,6 +54,9 @@ export function setupLoginLink() {
       Ratings
       <span id="ratingsBadge" style="margin-left:8px; background:#2563eb; color:#fff; font-size:12px; padding:2px 8px; border-radius:999px; display:none;"></span>
     </button>
+    <button id="myGamesBtn" type="button" style="width:100%; text-align:left; padding:10px 12px; border:0; background:transparent; cursor:pointer;">
+      My Games
+    </button>
     <div style="height:1px; background:#eee; margin:6px 0;"></div>
     <button id="logoutBtn" type="button" style="width:100%; text-align:left; padding:10px 12px; border:0; background:transparent; cursor:pointer;">
       Log out
@@ -88,6 +91,11 @@ export function setupLoginLink() {
   menu.querySelector("#ratingsBtn").addEventListener("click", () => {
     menu.style.display = "none";
     openPendingRatingsModal();
+  });
+  
+  menu.querySelector("#myGamesBtn").addEventListener("click", () => {
+    menu.style.display = "none";
+    window.location.href = "/my-games.html";
   });
 
   menu.querySelector("#logoutBtn").addEventListener("click", () => {

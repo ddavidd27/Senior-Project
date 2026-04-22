@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Games - Play4All</title>
+  <link rel="icon" type="image/png" href="/images/logo.png">
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="games.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a href="/index.html" class="brand">
+      <img src="/images/logo.png" alt="Play4All logo" class="logo" />
+      <div class="app-name">Play4All</div>
+    </a>
+    <button class="menu-toggle" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mainNav">
+      <span class="menu-toggle-line"></span>
+      <span class="menu-toggle-line"></span>
+      <span class="menu-toggle-line"></span>
+    </button>
+    <nav class="nav" id="mainNav">
+      <a class="pill" href="/games.html">Games</a>
+      <a class="pill" href="/about.html">About</a>
+      <a class="pill" href="/index.html#faq">FAQ</a>
+      <a class="pill" href="/chat" id="chatLink" style="display:none">Chat</a>
+      <div class="account-dropdown">
+        <a class="pill pill-ghost" href="/login" id="loginLink">Log in</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="nav-overlay" id="navOverlay"></div>
+
+  <main class="games-page">
+    <section class="games-hero">
+      <h1>My Games</h1>
+      <p>Manage your upcoming games and check who is joining.</p>
+    </section>
+
+    <section id="myGamesContainer" class="games-container"></section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-left">
+      <div class="brand footer-brand">
+        <img src="/images/logo.png" alt="Play4All logo" class="logo footer-logo" />
+        <div class="app-name">Play4All</div>
+      </div>
+      <p class="footer-text">Find nearby games, join local players, and create your own sports events.</p>
+    </div>
+
+    <div class="footer-mid">
+      <a class="footer-link" href="/games.html">Games</a>
+      <a class="footer-link" href="/about.html">About</a>
+      <a class="footer-link" href="/index.html#faq">FAQ</a>
+      <a class="footer-link" href="/login">Log in</a>
+    </div>
+
+    <div class="footer-right">
+      <div class="footer-copy">© 2026 Play4All</div>
+      <a class="footer-link" href="#privacy">Privacy</a>
+      <a class="footer-link" href="#terms">Terms</a>
+    </div>
+  </footer>
+
+  <script type="module" src="/js/pages/my-games.js"></script>
+  <script type="module" src="/js/pages/initHeader.js"></script>
+</body>
+</html>

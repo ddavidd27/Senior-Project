@@ -47,15 +47,12 @@ main {
   box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.08);
 }
 
-#sportsSection {
-  display: grid;
-  gap: 12px;
-}
-
 #sportsSection > div {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
 }
 
 #submitBtn {
