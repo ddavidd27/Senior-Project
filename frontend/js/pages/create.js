@@ -1,5 +1,10 @@
 const form = document.getElementById("createGameForm");
 const errorMsg = document.getElementById("errorMsg");
+const confirmMapBtn = document.getElementById("confirmMapBtn");
+const selectedLocationPreview = document.getElementById("selectedLocationPreview");
+
+let pendingLocation = null;
+
 
 function requireTokenOrRedirect() {
   const token = localStorage.getItem("token");
@@ -38,6 +43,19 @@ function closeModal() {
   mapModal.setAttribute("aria-hidden", "true");
 }
 
+function setPendingLocation({ name, lat, lng, placeId }) {
+  pendingLocation = {
+    name,
+    lat,
+    lng,
+    placeId: placeId || "",
+  };
+
+  selectedLocationPreview.textContent = `Selected: ${name}`;
+  confirmMapBtn.disabled = false;
+}
+
+
 function initMapOnce() {
   if (mapInitialized) return;
   if (!window.google || !google.maps || !google.maps.places) {
@@ -64,6 +82,12 @@ function initMapOnce() {
   const input = document.getElementById("pac-input");
   searchBox = new google.maps.places.SearchBox(input);
 
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+  });
+
   map.addListener("bounds_changed", () => {
     searchBox.setBounds(map.getBounds());
   });
@@ -82,12 +106,12 @@ function initMapOnce() {
     map.panTo(place.geometry.location);
     map.setZoom(15);
 
-    locationNameEl.value = place.formatted_address || place.name || "";
-    locationLatEl.value = String(lat);
-    locationLngEl.value = String(lng);
-    locationPlaceIdEl.value = place.place_id || "";
-
-    closeModal();
+    setPendingLocation({
+      name: place.formatted_address || place.name || "",
+      lat,
+      lng,
+      placeId: place.place_id || ""
+    });
   });
 
   map.addListener("click", (e) => {
@@ -112,12 +136,12 @@ function initMapOnce() {
           map.panTo(place.geometry.location);
           map.setZoom(16);
 
-          locationNameEl.value = place.formatted_address || place.name || "";
-          locationLatEl.value = String(lat);
-          locationLngEl.value = String(lng);
-          locationPlaceIdEl.value = place.place_id || e.placeId;
-
-          closeModal();
+          setPendingLocation({
+            name: place.formatted_address || place.name || "",
+            lat,
+            lng,
+            placeId: place.place_id || e.placeId,
+          });
         }
       );
 
@@ -125,17 +149,22 @@ function initMapOnce() {
     }
 
     marker.setPosition(e.latLng);
-    locationLatEl.value = String(e.latLng.lat());
-    locationLngEl.value = String(e.latLng.lng());
-    locationPlaceIdEl.value = "";
 
     geocoder.geocode({ location: e.latLng }, (results, status) => {
       if (status === "OK" && results && results[0]) {
-        locationNameEl.value = results[0].formatted_address;
-        closeModal();
+        setPendingLocation({
+          name: results[0].formatted_address,
+          lat: e.latLng.lat(),
+          lng: e.latLng.lng(),
+          placeId: "",
+        });
       } else {
-        locationNameEl.value = `Lat ${e.latLng.lat().toFixed(5)}, Lng ${e.latLng.lng().toFixed(5)}`;
-        closeModal();
+        setPendingLocation({
+          name: `Lat ${e.latLng.lat().toFixed(5)}, Lng ${e.latLng.lng().toFixed(5)}`,
+          lat: e.latLng.lat(),
+          lng: e.latLng.lng(),
+          placeId: "",
+        });
       }
     });
   });
@@ -226,4 +255,15 @@ form.addEventListener("submit", async (e) => {
     console.error(err);
     errorMsg.textContent = "Server not reachable";
   }
+});
+
+confirmMapBtn?.addEventListener("click", () => {
+  if (!pendingLocation) return;
+
+  locationNameEl.value = pendingLocation.name;
+  locationLatEl.value = String(pendingLocation.lat);
+  locationLngEl.value = String(pendingLocation.lng);
+  locationPlaceIdEl.value = pendingLocation.placeId;
+
+  closeModal();
 });
