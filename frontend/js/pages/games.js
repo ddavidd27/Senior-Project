@@ -271,8 +271,13 @@ function createGameCard(game) {
     ? `https://www.google.com/maps/search/?api=1&query_place_id=${game.locationPlaceId}`
     : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(game.locationName || "")}`;
 
-  const imageUrl = game.locationPlaceId
-    ? `/api/places/photo?placeId=${game.locationPlaceId}`
+  const hasLocationImage =
+    game.locationPlaceId || (game.locationLat != null && game.locationLng != null);
+
+  const imageUrl = hasLocationImage
+    ? `/api/places/photo?placeId=${encodeURIComponent(game.locationPlaceId || "")}` +
+      `&lat=${encodeURIComponent(game.locationLat ?? "")}` +
+      `&lng=${encodeURIComponent(game.locationLng ?? "")}`
     : null;
 
   card.innerHTML = `

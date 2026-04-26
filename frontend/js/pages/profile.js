@@ -11,7 +11,7 @@ const profileId = params.get("id");
 const isOwnProfile = !profileId;
 
 const nameEl = document.getElementById("name");
-const usernameEl = document.getElementById("username");
+const usernameEl = document.getElementById("profileUsername");
 const bioEl = document.getElementById("bio");
 const sportsList = document.getElementById("sportsList");
 const editBtn = document.getElementById("editBtn");
@@ -92,9 +92,7 @@ function renderProfile(data) {
   nameEl.textContent =
     `${data.firstName || ""} ${data.lastName || ""}`.trim() || "No name";
 
-  setTimeout(() => {
-    usernameEl.textContent = data.username ? `@${data.username}` : "";
-  }, 0);
+  usernameEl.textContent = data.username ? `@${data.username}` : "";
   bioEl.textContent = data.bio || "No bio yet";
 
   sportsList.innerHTML = "";
