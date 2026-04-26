@@ -102,15 +102,23 @@ router.get("/sports", (req, res) => {
 
 router.get("/my", auth, async (req, res) => {
   try {
+    const now = new Date();
+
     const games = await Game.find({
-      players: req.userId })
+      players: req.userId,
+    })
       .populate("players", "username")
       .populate("createdBy", "username");
 
-    const sorted = games.sort((a, b) => {
+    const upcomingGames = games.filter((game) => {
+      const gameDateTime = new Date(`${game.date}T${game.startTime}`);
+      return gameDateTime >= now;
+    });
+
+    const sorted = upcomingGames.sort((a, b) => {
       const dateA = new Date(`${a.date}T${a.startTime}`);
       const dateB = new Date(`${b.date}T${b.startTime}`);
-      return dateB - dateA;
+      return dateA - dateB;
     });
 
     res.json(sorted.slice(0, 5));
@@ -118,6 +126,7 @@ router.get("/my", auth, async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 });
+
 
 router.post("/", auth, async (req, res) => {
   try {

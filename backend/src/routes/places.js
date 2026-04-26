@@ -8,23 +8,20 @@ router.get("/photo", async (req, res) => {
     const key = process.env.GOOGLE_MAPS_API_KEY;
     if (!key) return res.status(500).send("Missing GOOGLE_MAPS_API_KEY");
 
-    const fallbackStatic = () => {
-      if (!lat || !lng) {
-        return res.redirect(
-          302,
-          "https://via.placeholder.com/800x400?text=No+photo+available"
-        );
+    const staticMapUrl = (mapLat, mapLng) =>
+      "https://maps.googleapis.com/maps/api/staticmap" +
+      `?center=${encodeURIComponent(mapLat)},${encodeURIComponent(mapLng)}` +
+      `&zoom=${encodeURIComponent(zoom)}` +
+      `&size=800x400` +
+      `&markers=${encodeURIComponent(`${mapLat},${mapLng}`)}` +
+      `&key=${encodeURIComponent(key)}`;
+
+    const fallbackStatic = (fallbackLat = lat, fallbackLng = lng) => {
+      if (!fallbackLat || !fallbackLng) {
+        return res.status(404).send("No photo or location available");
       }
 
-      const staticUrl =
-        "https://maps.googleapis.com/maps/api/staticmap" +
-        `?center=${encodeURIComponent(lat)},${encodeURIComponent(lng)}` +
-        `&zoom=${encodeURIComponent(zoom)}` +
-        `&size=800x400` +
-        `&markers=${encodeURIComponent(`${lat},${lng}`)}` +
-        `&key=${encodeURIComponent(key)}`;
-
-      return res.redirect(302, staticUrl);
+      return res.redirect(302, staticMapUrl(fallbackLat, fallbackLng));
     };
 
     if (!placeId) return fallbackStatic();
@@ -32,28 +29,33 @@ router.get("/photo", async (req, res) => {
     const detailsUrl =
       "https://maps.googleapis.com/maps/api/place/details/json" +
       `?place_id=${encodeURIComponent(placeId)}` +
-      `&fields=photos` +
+      `&fields=photos,geometry` +
       `&key=${encodeURIComponent(key)}`;
 
     const detailsRes = await fetch(detailsUrl);
     const details = await detailsRes.json();
 
     const photoRef = details?.result?.photos?.[0]?.photo_reference;
-    if (!photoRef) return fallbackStatic();
 
-    const photoUrl =
-      "https://maps.googleapis.com/maps/api/place/photo" +
-      `?maxwidth=${encodeURIComponent(maxwidth)}` +
-      `&photo_reference=${encodeURIComponent(photoRef)}` +
-      `&key=${encodeURIComponent(key)}`;
+    if (photoRef) {
+      const photoUrl =
+        "https://maps.googleapis.com/maps/api/place/photo" +
+        `?maxwidth=${encodeURIComponent(maxwidth)}` +
+        `&photo_reference=${encodeURIComponent(photoRef)}` +
+        `&key=${encodeURIComponent(key)}`;
 
-    return res.redirect(302, photoUrl);
+      return res.redirect(302, photoUrl);
+    }
+
+    const location = details?.result?.geometry?.location;
+    if (location?.lat && location?.lng) {
+      return fallbackStatic(location.lat, location.lng);
+    }
+
+    return fallbackStatic();
   } catch (err) {
     console.error(err);
-    return res.redirect(
-      302,
-      "https://via.placeholder.com/800x400?text=Error+loading+photo"
-    );
+    return res.status(404).send("Error loading location image");
   }
 });
 
