@@ -74,9 +74,13 @@ export function renderGames(games) {
 
     const locationText = escapeHtml(g.locationName || "Unknown place");
 
-    const mapsUrl = g.locationPlaceId
-      ? `https://www.google.com/maps/search/?api=1&query_place_id=${encodeURIComponent(g.locationPlaceId)}`
-      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(g.locationName || "")}`;
+    const locationQuery =
+      g.locationLat != null && g.locationLng != null
+        ? `${g.locationLat},${g.locationLng}`
+        : g.locationName || "";
+
+    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationQuery)}`;
+
 
     const imgSrc =
       `/api/places/photo?placeId=${encodeURIComponent(g.locationPlaceId || "")}` +
@@ -86,7 +90,7 @@ export function renderGames(games) {
 
     article.innerHTML = `
       <div class="card-img">
-        <a href="${mapsUrl}" target="_blank">
+        <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer">
           <img class="venue-img" src="${imgSrc}">
         </a>
       </div>
@@ -103,7 +107,7 @@ export function renderGames(games) {
         </div>
 
         <div class="meta-sub">
-          <a href="${mapsUrl}" target="_blank">${locationText}</a>
+          <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer">${locationText}</a>
         </div>
 
         <button class="btn btn-outline join-btn" data-game-id="${g._id}">
@@ -115,6 +119,7 @@ export function renderGames(games) {
         </button>
       </div>
     `;
+
 
     const infoBtn = article.querySelector(".info-btn");
     infoBtn.addEventListener("click", () => {

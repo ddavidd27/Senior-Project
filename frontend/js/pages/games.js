@@ -267,9 +267,14 @@ function createGameCard(game) {
       return false;
     });
 
+  const locationQuery =
+    game.locationLat != null && game.locationLng != null
+      ? `${game.locationLat},${game.locationLng}`
+      : game.locationName || "";
+
   const mapsUrl = game.locationPlaceId
-    ? `https://www.google.com/maps/search/?api=1&query_place_id=${game.locationPlaceId}`
-    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(game.locationName || "")}`;
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationQuery)}&query_place_id=${encodeURIComponent(game.locationPlaceId)}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationQuery)}`;
 
   const hasLocationImage =
     game.locationPlaceId || (game.locationLat != null && game.locationLng != null);
@@ -281,7 +286,12 @@ function createGameCard(game) {
     : null;
 
   card.innerHTML = `
-    ${imageUrl ? `<img src="${imageUrl}" class="game-img" />` : ""}
+    ${imageUrl ? `
+      <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer">
+        <img src="${imageUrl}" class="game-img" />
+      </a>
+    ` : ""}
+
 
     <div class="game-content">
       <h3>${capitalizeWords(game.sport)} - ${capitalizeWords(game.type)}</h3>
