@@ -47,12 +47,15 @@ async function loadUpcomingGames() {
     upcomingContainer.innerHTML = visibleGames.map((game) => {
       const joined = Array.isArray(game.players) ? game.players.length : 0;
 
-      const locationQuery =
-        game.locationLat != null && game.locationLng != null
-          ? `${game.locationLat},${game.locationLng}`
-          : game.locationName || "";
+    const locationQuery =
+      game.locationLat != null && game.locationLng != null
+        ? `${game.locationLat},${game.locationLng}`
+        : game.locationName || "";
 
-      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationQuery)}`;
+    const mapsUrl = game.locationPlaceId
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationQuery)}&query_place_id=${encodeURIComponent(game.locationPlaceId)}`
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationQuery)}`;
+
 
 
       return `

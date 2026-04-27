@@ -79,7 +79,9 @@ export function renderGames(games) {
         ? `${g.locationLat},${g.locationLng}`
         : g.locationName || "";
 
-    const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationQuery)}`;
+    const mapsUrl = g.locationPlaceId
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationQuery)}&query_place_id=${encodeURIComponent(g.locationPlaceId)}`
+      : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationQuery)}`;
 
 
     const imgSrc =

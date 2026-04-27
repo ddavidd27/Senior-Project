@@ -70,16 +70,27 @@ function createMyGameCard(game) {
 
   const joinedCount = Array.isArray(game.players) ? game.players.length : 0;
 
+  const locationQuery =
+    game.locationLat != null && game.locationLng != null
+      ? `${game.locationLat},${game.locationLng}`
+      : game.locationName || "";
+
   const mapsUrl = game.locationPlaceId
-    ? `https://www.google.com/maps/search/?api=1&query_place_id=${game.locationPlaceId}`
-    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(game.locationName || "")}`;
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationQuery)}&query_place_id=${encodeURIComponent(game.locationPlaceId)}`
+    : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationQuery)}`;
+
 
   const imageUrl = game.locationPlaceId
     ? `/api/places/photo?placeId=${game.locationPlaceId}`
     : null;
 
   card.innerHTML = `
-    ${imageUrl ? `<img src="${imageUrl}" class="game-img" />` : ""}
+    ${imageUrl ? `
+      <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer">
+        <img src="${imageUrl}" class="game-img" />
+      </a>
+    ` : ""}
+
 
     <div class="game-content">
       <h3>${capitalizeWords(game.sport)} - ${capitalizeWords(game.type)}</h3>
@@ -90,8 +101,8 @@ function createMyGameCard(game) {
 
       <p>
         <strong>Location:</strong> 
-        <a href="${mapsUrl}" target="_blank" class="location-link">
-          ${game.locationName || "View location"}
+        <a href="${mapsUrl}" target="_blank" rel="noopener noreferrer" class="location-link">
+
         </a>
       </p>
 
